@@ -7,11 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
-
+    runs-on: windows-latest  # Chạy trên Windows runner
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Lấy mã nguồn từ repository
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,9 +24,6 @@ jobs:
 
       - name: Build with PyInstaller
         run: pyinstaller --onefile dieukhieniq200.py
-
-      - name: Wait for 10 seconds
-        run: sleep 10
 
       - name: Retry Upload to GitHub Release
         run: |
@@ -43,7 +39,7 @@ jobs:
             } catch {
               Write-Host "Retrying..."
               Start-Sleep -Seconds 10
+            }
           }
-          }
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
