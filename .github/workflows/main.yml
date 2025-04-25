@@ -27,7 +27,7 @@ jobs:
         run: pyinstaller --onefile dieukhieniq200.py
 
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v2  # Dùng phiên bản cũ hơn (v2)
+        uses: actions/upload-artifact@v3  # Cập nhật lên v3
         with:
           name: myapp-exe
           path: dist/dieukhieniq200.exe
