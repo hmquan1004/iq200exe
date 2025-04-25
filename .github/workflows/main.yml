@@ -2,7 +2,7 @@ name: Build EXE and Create Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -27,14 +27,14 @@ jobs:
         run: pyinstaller --onefile dieukhieniq200.py
 
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # Dùng phiên bản cũ hơn (v2)
         with:
           name: myapp-exe
           path: dist/dieukhieniq200.exe
 
       - name: Create Release
         run: |
-          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}  # Đăng nhập bằng token
+          gh auth login --with-token ${{ secrets.PAT_TOKEN }}  # Đăng nhập bằng Personal Access Token (PAT)
           gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
