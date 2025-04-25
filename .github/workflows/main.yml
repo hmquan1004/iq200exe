@@ -24,11 +24,10 @@ jobs:
           pip install pyinstaller
 
       - name: Build with PyInstaller
-        run: |
-          pyinstaller --onefile main.py
+        run: pyinstaller --onefile dieukhieniq200.py
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v3
         with:
-          name: myapp-exe
-          path: dist/main.exe
+          name: iq200exe
+          path: dist/dieukhieniq200.exe
