@@ -1,4 +1,4 @@
-name: Build EXE
+name: Build EXE and Create Release
 
 on:
   push:
@@ -26,8 +26,11 @@ jobs:
       - name: Build with PyInstaller
         run: pyinstaller --onefile dieukhieniq200.py
 
-      - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: iq200exe
-          path: dist/dieukhieniq200.exe
+          name: "Auto Build Release"
+          tag_name: v1.${{ github.run_number }}
+          files: dist/dieukhieniq200.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
