@@ -31,15 +31,19 @@ jobs:
 
       - name: Retry Upload to GitHub Release
         run: |
-          for i in {1..3}; do
-            echo "Attempt $i"
-            if gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe; then
-              echo "Release created successfully"
-              break
-            else
-              echo "Retrying..."
-              sleep 10
-            fi
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          $success = $false
+          $attempt = 0
+          while ($attempt -lt 3 -and !$success) {
+            $attempt++
+            Write-Host "Attempt $attempt"
+            try {
+              gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe
+              $success = $true
+              Write-Host "Release created successfully"
+            } catch {
+              Write-Host "Retrying..."
+              Start-Sleep -Seconds 10
+          }
+          }
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
