@@ -30,7 +30,7 @@ jobs:
         run: sleep 5
 
       - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v1.6.0
         with:
           name: "Auto Release ${{ github.run_number }}"
           tag_name: v1.${{ github.run_number }}
