@@ -8,9 +8,10 @@ on:
 jobs:
   build:
     runs-on: windows-latest  # Chạy trên Windows runner
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Lấy mã nguồn từ repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,21 +26,15 @@ jobs:
       - name: Build with PyInstaller
         run: pyinstaller --onefile dieukhieniq200.py
 
-      - name: Retry Upload to GitHub Release
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: myapp-exe
+          path: dist/dieukhieniq200.exe
+
+      - name: Create Release
         run: |
-          $success = $false
-          $attempt = 0
-          while ($attempt -lt 3 -and !$success) {
-            $attempt++
-            Write-Host "Attempt $attempt"
-            try {
-              gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe
-              $success = $true
-              Write-Host "Release created successfully"
-            } catch {
-              Write-Host "Retrying..."
-              Start-Sleep -Seconds 10
-            }
-          }
+          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}  # Đăng nhập bằng token
+          gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
