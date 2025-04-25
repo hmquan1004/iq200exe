@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Chạy trên Windows runner
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -27,14 +27,14 @@ jobs:
         run: pyinstaller --onefile dieukhieniq200.py
 
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3  # Cập nhật lên v3
+        uses: actions/upload-artifact@v2
         with:
           name: myapp-exe
           path: dist/dieukhieniq200.exe
 
-      - name: Create Release
-        run: |
-          gh auth login --with-token ${{ secrets.PAT_TOKEN }}  # Đăng nhập bằng Personal Access Token (PAT)
-          gh release create v1.${{ github.run_number }} dist/dieukhieniq200.exe
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/dieukhieniq200.exe
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
