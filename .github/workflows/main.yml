@@ -1,29 +1,37 @@
-name: Build Windows EXE
+name: Build EXE with PyInstaller
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
-      - name: Install PyInstaller
-        run: pip install pyinstaller
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller pyvisa pyvisa-py
 
-      - name: Build EXE
-        run: pyinstaller --onefile dieukhieniq200.py
+      - name: Build executable
+        run: pyinstaller --onefile --hidden-import=pyvisa --hidden-import=pyvisa-py N5181A.py
 
-      - name: Upload EXE as artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
           name: dieukhieniq200-exe
           path: dist/dieukhieniq200.exe
